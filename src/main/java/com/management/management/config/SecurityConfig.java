@@ -39,11 +39,7 @@ public class SecurityConfig {
         auth.userDetailsService(userDetailsService);
     }
 
-    @Bean
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy(){
-        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
 
-    }
 
 
     @Bean
