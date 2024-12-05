@@ -1,5 +1,6 @@
 package com.management.management.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -18,17 +19,18 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    private String secretKey="";
+    private String secretKey;
 
 
     public JwtUtil() {
-        try {
-            KeyGenerator keyGen=KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk =keyGen.generateKey();
-            secretKey=Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        secretKey= System.getenv("JWT_SECRET_KEY");
+        if(secretKey==null || secretKey.isEmpty()){
+            throw new RuntimeException("JWT_KEY is not  in environment");
         }
+
+
+
+
 
 
     }
@@ -50,7 +52,7 @@ public class JwtUtil {
 
     }
     private SecretKey getKey(){
-        byte[]key= Decoders.BASE64.decode(secretKey);
+        byte[]key= Base64.getDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(key);
 
     }
